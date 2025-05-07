@@ -1,7 +1,7 @@
 import { Send } from 'lucide-react';
 import { useState } from 'react';
 
-const Chat = ({ userId, currentUserEmail, messages, sendMessage }) => {
+const Chat = ({ userId, currentUserEmail, messages, sendMessage, goBack }) => {
     const [message, setMessage] = useState('');
 
     const handleSend = () => {
@@ -13,7 +13,6 @@ const Chat = ({ userId, currentUserEmail, messages, sendMessage }) => {
         setMessage('');
     };
 
-    // Filter messages between current user and receiver only
     const filteredMessages = messages
         .filter(msg =>
             (msg.senderEmail === currentUserEmail && msg.receiverEmail === userId) ||
@@ -26,10 +25,18 @@ const Chat = ({ userId, currentUserEmail, messages, sendMessage }) => {
         });
 
     return (
-        <div className="flex flex-col h-full bg-gray-100 dark:bg-gray-900">
+        <div className="flex flex-col h-full max-h-screen bg-gray-100 dark:bg-gray-900 max-w-screen-sm mx-auto">
             {/* Header */}
-            <div className="bg-indigo-600 text-white px-6 py-4 shadow dark:bg-indigo-800">
-                <h2 className="text-lg font-semibold">Chat with {userId || "Unknown"}</h2>
+            <div className="bg-indigo-600 text-white px-4 sm:px-6 py-4 shadow dark:bg-indigo-800 flex items-center justify-between">
+                {/* Mobile Back Button */}
+                <button
+                    onClick={goBack}
+                    className="sm:hidden text-white text-sm font-medium mr-2"
+                >
+                    ← Back
+                </button>
+                <h2 className="text-lg font-semibold truncate">Chat with {userId || "Unknown"}</h2>
+                <div className="w-6 sm:w-0" /> {/* Spacer for alignment */}
             </div>
 
             {/* Messages */}
@@ -51,7 +58,7 @@ const Chat = ({ userId, currentUserEmail, messages, sendMessage }) => {
                                 className={`flex ${isSender ? 'justify-end' : 'justify-start'}`}
                             >
                                 <div
-                                    className={`max-w-xs px-4 py-2 rounded-lg shadow text-sm ${isSender
+                                    className={`max-w-[80%] px-4 py-2 rounded-lg shadow text-sm break-words ${isSender
                                         ? 'bg-indigo-600 text-white dark:bg-indigo-500'
                                         : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
                                         }`}
@@ -67,13 +74,13 @@ const Chat = ({ userId, currentUserEmail, messages, sendMessage }) => {
                 )}
             </div>
 
-
+            {/* Input */}
             <div className="bg-white border-t dark:bg-gray-800 dark:border-gray-700 px-4 py-3">
                 <div className="flex items-center gap-2">
                     <input
                         type="text"
                         placeholder="Type your message..."
-                        className="flex-1 border border-gray-300 dark:border-gray-700 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-indigo-600 transition dark:bg-gray-800 dark:text-white"
+                        className="flex-1 border border-gray-300 dark:border-gray-700 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 dark:focus:ring-indigo-600 transition dark:bg-gray-800 dark:text-white"
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSend()}

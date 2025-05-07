@@ -43,9 +43,10 @@ function Dashboard(props) {
     };
 
     return (
-        <div className="flex h-screen overflow-hidden bg-white dark:bg-gray-900 text-black dark:text-white">
-            <div className="flex-1 flex overflow-hidden relative">
-                {/* Theme Toggle Button */}
+        <div className="flex flex-col md:flex-row h-screen overflow-hidden bg-white dark:bg-gray-900 text-black dark:text-white">
+            <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+
+                {/* Theme Toggle */}
                 <div className="absolute top-4 right-4 z-10">
                     <button
                         onClick={() => setDarkMode(!darkMode)}
@@ -57,7 +58,7 @@ function Dashboard(props) {
                 </div>
 
                 {/* Sidebar */}
-                <div className="w-1/3 flex flex-col overflow-hidden border-r border-gray-300 dark:border-gray-700">
+                <div className={`w-full md:w-1/3 flex flex-col overflow-hidden border-b md:border-b-0 md:border-r border-gray-300 dark:border-gray-700 ${selectedUserId ? "hidden md:flex" : "flex"}`}>
                     {/* Sticky Profile Header */}
                     <div className="sticky top-0 z-20 bg-gray-100 dark:bg-gray-800 p-4 border-b border-gray-200 dark:border-gray-700">
                         <div className="flex items-center justify-between gap-2">
@@ -91,13 +92,14 @@ function Dashboard(props) {
                 </div>
 
                 {/* Chat Area */}
-                <div className="flex-1 overflow-hidden">
+                <div className="w-full md:flex-1 overflow-hidden">
                     {selectedUserId ? (
                         <Chat
                             userId={selectedUserId}
                             sendMessage={props.sendMessage}
                             messages={props.messages.data}
                             currentUserEmail={email}
+                            goBack={() => setSelectedUserId(null)} // 👈 Back support
                         />
                     ) : (
                         <div className="h-full flex items-center justify-center text-gray-400 dark:text-gray-500">
